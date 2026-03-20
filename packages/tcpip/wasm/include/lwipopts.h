@@ -47,7 +47,8 @@
 
 // TCP options
 #define LWIP_TCP 1                                    // Enable TCP functionality
-#define TCP_MSS 1460                                  // Maximum segment size
+#define LWIP_TCP_TIMESTAMPS 1                         // Enable TCP timestamps (needed by Linux)
+#define TCP_MSS 1448                                  // Maximum segment size (reduced from 1460 for timestamp option)
 #define TCP_WND (4 * TCP_MSS)                         // TCP window size
 #define TCP_SND_BUF (4 * TCP_MSS)                     // TCP send buffer size
 #define TCP_SND_QUEUELEN (2 * TCP_SND_BUF / TCP_MSS)  // TCP send queue length
