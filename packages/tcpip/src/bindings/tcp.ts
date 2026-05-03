@@ -37,7 +37,7 @@ const tcpConnectionHooks = new Hooks<
   TcpConnectionInnerHooks
 >();
 
-export const MAX_SEGMENT_SIZE = 1460; // This must match TCP_MSS in lwipopts.h
+export const MAX_SEGMENT_SIZE = 1448; // effective data per segment: TCP_MSS (1460) - timestamp option (12)
 export const MAX_WINDOW_SIZE = MAX_SEGMENT_SIZE * 4; // This must match TCP_WND in lwipopts.h
 export const SEND_BUFFER_SIZE = MAX_SEGMENT_SIZE * 4; // This must match TCP_SND_BUF in lwipopts.h
 export const READABLE_HIGH_WATER_MARK = MAX_SEGMENT_SIZE;
@@ -357,26 +357,28 @@ export class VirtualTcpConnection
   }
 
   #enqueueBuffer() {
-    if (!this.#readableController?.desiredSize) {
+    if (!(this.#readableController?.desiredSize! > 0)) {
       return;
     }
 
     let bytesEnqueued = 0;
 
-    // Enqueue chunks until the desired size is reached
+    // Enqueue chunks until the desired size is reached.
+    // Always enqueue at least one chunk (desiredSize is a soft limit per the
+    // WHATWG Streams spec - chunks can push it negative).
     while (this.#receiveBuffer.length > 0) {
       const chunkLength = this.#receiveBuffer[0]!.length;
 
-      if (bytesEnqueued + chunkLength > this.#readableController.desiredSize) {
+      if (bytesEnqueued > 0 && bytesEnqueued + chunkLength > this.#readableController!.desiredSize!) {
         break;
       }
 
       const chunk = this.#receiveBuffer.shift()!;
-      this.#readableController.enqueue(chunk);
+      this.#readableController!.enqueue(chunk);
       bytesEnqueued += chunk.length;
     }
 
-    // Notify the TCP stack that we've read the data
+    // Notify the TCP stack that we've consumed data to reopen the receive window
     if (bytesEnqueued > 0) {
       tcpConnectionHooks.getOuter(this).updateReceiveBuffer(bytesEnqueued);
     }
