@@ -2,11 +2,15 @@
   "name": "@tcpip/v86",
   "version": "0.2.1",
   "description": "Network adapter that connects tcpip.js with v86",
+  "license": "MIT",
+  "type": "module",
   "main": "dist/index.cjs",
   "types": "dist/index.d.ts",
+  "sideEffects": false,
   "scripts": {
     "build": "tsup --clean",
     "clean": "rm -rf dist",
+    "test": "vitest",
     "prepublishOnly": "npm run build"
   },
   "files": [
@@ -19,9 +23,12 @@
       "default": "./dist/index.cjs"
     }
   },
-  "dependencies": {},
   "devDependencies": {
+    "@tcpip/wire": "^0.1.2",
     "@total-typescript/tsconfig": "^1.0.4",
-    "typescript": "^5.0.4"
+    "@types/node": "^22.15.19",
+    "typescript": "^5.8.3",
+    "v86": "^0.5.44",
+    "vitest": "^3.1.4"
   }
 }

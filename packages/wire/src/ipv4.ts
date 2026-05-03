@@ -4,6 +4,11 @@ import {
   type IcmpMessage,
 } from './icmp.js';
 import {
+  parseTcpSegment,
+  serializeTcpSegment,
+  type TcpSegment,
+} from './tcp.js';
+import {
   parseUdpDatagram,
   serializeUdpDatagram,
   UDP_HEADER_LENGTH,
@@ -34,7 +39,7 @@ export type IcmpIPv4Packet = IPv4PacketBase & {
 
 export type TcpIPv4Packet = IPv4PacketBase & {
   protocol: 'tcp';
-  payload: Uint8Array;
+  payload: TcpSegment;
 };
 
 export type UdpIPv4Packet = IPv4PacketBase & {
@@ -116,7 +121,15 @@ export function parseIPv4Packet(data: Uint8Array): IPv4Packet {
         protocol,
         sourceIP,
         destinationIP,
-        payload,
+        payload: parseTcpSegment(
+          payload,
+          serializeIPv4PseudoHeader({
+            sourceIP,
+            destinationIP,
+            protocol,
+            length: payload.length,
+          })
+        ),
       };
     case 'udp':
       return {
@@ -156,7 +169,12 @@ export function serializeIPv4Packet(packet: IPv4Packet): Uint8Array {
       payload = serializeIcmpMessage(packet.payload);
       break;
     case 'tcp':
-      payload = packet.payload;
+      payload = serializeTcpSegment(packet.payload, {
+        sourceIP: packet.sourceIP,
+        destinationIP: packet.destinationIP,
+        protocol: packet.protocol,
+        length: IPV4_HEADER_LENGTH + packet.payload.payload.length,
+      });
       break;
     case 'udp':
       payload = serializeUdpDatagram(packet.payload, {

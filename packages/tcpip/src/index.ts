@@ -1,5 +1,5 @@
 export { createStack, type NetworkStack } from './stack.js';
-export type { NetworkInterface } from './types.js';
+export type { DuplexStream, NetworkInterface } from './types.js';
 
 export type {
   LoopbackInterface,
@@ -22,10 +22,16 @@ export type {
 } from './bindings/bridge-interface.js';
 
 export type {
+  TcpConnection,
   TcpConnectionOptions,
+  TcpListener,
   TcpListenerOptions,
 } from './bindings/tcp.js';
-export type { TcpConnection, TcpListener } from './bindings/tcp.js';
 
-export type { UdpDatagram, UdpSocketOptions } from './bindings/udp.js';
-export type { UdpSocket } from './bindings/udp.js';
+export type {
+  UdpDatagram,
+  UdpSocket,
+  UdpSocketOptions,
+} from './bindings/udp.js';
+
+export { connectStreams } from './util.js';

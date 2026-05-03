@@ -50,3 +50,8 @@ export type NetworkInterface =
   | TunInterface
   | TapInterface
   | BridgeInterface;
+
+export type DuplexStream<R = any> = {
+  readable: ReadableStream<R>;
+  writable: WritableStream<R>;
+};

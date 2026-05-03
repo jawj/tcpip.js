@@ -183,6 +183,168 @@ test('serializes an IPv4 packet containing a UDP datagram', () => {
   );
 });
 
+test('parses an IPv4 packet containing a TCP segment', () => {
+  const packet = new Uint8Array([
+    0x45, // version, IHL
+    0x00, // DSCP, ECN
+    0x00,
+    0x28, // total length: 40 (20 IP + 20 TCP)
+    0x00,
+    0x00, // identification
+    0x00,
+    0x00, // flags, fragment offset
+    0x40, // TTL: 64
+    0x06, // protocol: TCP
+    0xf7,
+    0x7c, // checksum: 0xf77c
+    0xc0,
+    0xa8,
+    0x01,
+    0x01, // source IP: 192.168.1.1
+    0xc0,
+    0xa8,
+    0x01,
+    0x02, // destination IP: 192.168.1.2
+    0x00,
+    0x50, // source port: 80
+    0x01,
+    0xbb, // destination port: 443
+    0x00,
+    0x00,
+    0x00,
+    0x01, // sequence number: 1
+    0x00,
+    0x00,
+    0x00,
+    0x02, // acknowledgment number: 2
+    0x50,
+    0x12, // data offset: 5 (20 bytes), flags: SYN,ACK
+    0x04,
+    0x00, // window size: 1024
+    0x26,
+    0x71, // checksum: 0x2671
+    0x00,
+    0x00, // urgent pointer: 0
+  ]);
+
+  const result = parseIPv4Packet(packet);
+
+  expect(result).toEqual({
+    version: 4,
+    dscp: 0,
+    ecn: 0,
+    identification: 0,
+    flags: 0,
+    fragmentOffset: 0,
+    ttl: 64,
+    protocol: 'tcp',
+    sourceIP: '192.168.1.1',
+    destinationIP: '192.168.1.2',
+    payload: {
+      sourcePort: 80,
+      destinationPort: 443,
+      sequenceNumber: 1,
+      acknowledgmentNumber: 2,
+      dataOffset: 20,
+      reserved: 0,
+      flags: {
+        urg: false,
+        ack: true,
+        psh: false,
+        rst: false,
+        syn: true,
+        fin: false,
+      },
+      windowSize: 1024,
+      urgentPointer: 0,
+      options: new Uint8Array([]),
+      payload: new Uint8Array([]),
+    },
+  });
+});
+
+test('serializes an IPv4 packet containing a TCP segment', () => {
+  const packet: IPv4Packet = {
+    version: 4,
+    dscp: 0,
+    ecn: 0,
+    identification: 0,
+    flags: 0,
+    fragmentOffset: 0,
+    ttl: 64,
+    protocol: 'tcp',
+    sourceIP: '192.168.1.1',
+    destinationIP: '192.168.1.2',
+    payload: {
+      sourcePort: 80,
+      destinationPort: 443,
+      sequenceNumber: 1,
+      acknowledgmentNumber: 2,
+      dataOffset: 20,
+      reserved: 0,
+      flags: {
+        urg: false,
+        ack: true,
+        psh: false,
+        rst: false,
+        syn: true,
+        fin: false,
+      },
+      windowSize: 1024,
+      urgentPointer: 0,
+      options: new Uint8Array([]),
+      payload: new Uint8Array([]),
+    },
+  };
+
+  const result = serializeIPv4Packet(packet);
+
+  expect(result).toEqual(
+    new Uint8Array([
+      0x45, // version, IHL
+      0x00, // DSCP, ECN
+      0x00,
+      0x28, // total length: 40 (20 IP + 20 TCP)
+      0x00,
+      0x00, // identification
+      0x00,
+      0x00, // flags, fragment offset
+      0x40, // TTL: 64
+      0x06, // protocol: TCP
+      0xf7,
+      0x7c, // checksum: 0xf77c
+      0xc0,
+      0xa8,
+      0x01,
+      0x01, // source IP: 192.168.1.1
+      0xc0,
+      0xa8,
+      0x01,
+      0x02, // destination IP: 192.168.1.2
+      0x00,
+      0x50, // source port: 80
+      0x01,
+      0xbb, // destination port: 443
+      0x00,
+      0x00,
+      0x00,
+      0x01, // sequence number: 1
+      0x00,
+      0x00,
+      0x00,
+      0x02, // acknowledgment number: 2
+      0x50,
+      0x12, // data offset: 5 (20 bytes), flags: SYN,ACK
+      0x04,
+      0x00, // window size: 1024
+      0x26,
+      0x71, // checksum: 0x2671
+      0x00,
+      0x00, // urgent pointer: 0
+    ])
+  );
+});
+
 test('gets standard prefix lengths from netmask', () => {
   expect(getPrefixLength(Uint8Array.from([0, 0, 0, 0]))).toBe(0);
   expect(getPrefixLength(Uint8Array.from([255, 0, 0, 0]))).toBe(8);

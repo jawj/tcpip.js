@@ -1,4 +1,5 @@
 {
-  "extends": "@total-typescript/tsconfig/bundler/dom/library",
-  "include": ["src/**/*.ts"]
+  "extends": "@total-typescript/tsconfig/tsc/dom/library",
+  "include": ["src/**/*.ts"],
+  "exclude": ["src/**/*.test.ts"]
 }

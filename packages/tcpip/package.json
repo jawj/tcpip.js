@@ -13,6 +13,8 @@
     "build:wasm": "npm run make build",
     "prepublishOnly": "npm run build",
     "test": "vitest",
+    "test:node": "vitest --project node",
+    "test:browser": "vitest --project browser",
     "clean": "rm -rf dist",
     "make": "CC='docker compose run --rm wasi-sdk /opt/wasi-sdk/bin/clang' AR='docker compose run --rm wasi-sdk /opt/wasi-sdk/bin/ar' make",
     "wasm-objdump": "docker compose run --rm wabt wasm-objdump",
@@ -36,6 +38,7 @@
   },
   "devDependencies": {
     "@playwright/test": "^1.52.0",
+    "@tcpip/v86": "^0.2.1",
     "@total-typescript/tsconfig": "^1.0.4",
     "@types/node": "^22.8.6",
     "@vitest/browser": "^3.1.2",
@@ -43,6 +46,7 @@
     "tsup": "^8.3.5",
     "tsx": "^4.19.2",
     "typescript": "^5.6.3",
+    "v86": "^0.5.44",
     "vitest": "^3.1.2"
   }
 }
