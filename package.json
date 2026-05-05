@@ -1,10 +1,13 @@
 {
   "private": true,
-  "workspaces": [
-    "packages/*"
-  ],
+  "packageManager": "pnpm@10.33.0",
   "scripts": {
-    "build": "npm run build -w @tcpip/wire -w @tcpip/dns -w @tcpip/dhcp -w @tcpip/v86 -w tcpip",
-    "test": "npm run test --workspaces --if-present"
+    "build": "pnpm -r build",
+    "test": "pnpm -r --if-present test",
+    "format": "biome format --write .",
+    "check": "biome check --write ."
+  },
+  "devDependencies": {
+    "@biomejs/biome": "catalog:"
   }
 }

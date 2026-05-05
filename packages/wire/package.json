@@ -9,11 +9,9 @@
     "build": "tsup --clean",
     "clean": "rm -rf dist",
     "test": "vitest",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "pnpm run build"
   },
-  "files": [
-    "dist/**/*"
-  ],
+  "files": ["dist/**/*"],
   "exports": {
     ".": {
       "import": "./dist/index.js",
@@ -23,8 +21,9 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "@total-typescript/tsconfig": "^1.0.4",
-    "typescript": "^5.0.4",
-    "vitest": "^3.0.1"
+    "@total-typescript/tsconfig": "catalog:",
+    "tsup": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
   }
 }
