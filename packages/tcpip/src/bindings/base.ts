@@ -42,9 +42,8 @@ export abstract class Bindings<Imports, Exports> {
    *
    * @returns A pointer to the start of the copied data.
    */
-  copyToMemory(data: ArrayBuffer) {
-    const bytes = new Uint8Array(data);
-    const length = bytes.length;
+  copyToMemory(data: Uint8Array) {
+    const length = data.length;
     const pointer = this.smartMalloc(length);
 
     const memoryView = new Uint8Array(
@@ -53,7 +52,7 @@ export abstract class Bindings<Imports, Exports> {
       length
     );
 
-    memoryView.set(bytes);
+    memoryView.set(data);
 
     return pointer;
   }

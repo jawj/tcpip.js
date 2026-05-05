@@ -1,12 +1,12 @@
 import {
-  serializeArpMessage,
-  parseArpMessage,
   type ArpMessage,
+  parseArpMessage,
+  serializeArpMessage,
 } from './arp.js';
 import {
-  serializeIPv4Packet,
-  parseIPv4Packet,
   type IPv4Packet,
+  parseIPv4Packet,
+  serializeIPv4Packet,
 } from './ipv4.js';
 
 export type MacAddress =
@@ -73,7 +73,6 @@ export function serializeEthernetFrame(frame: EthernetFrame): Uint8Array {
     case 'ipv4':
       payload = serializeIPv4Packet(frame.payload);
       break;
-      break;
     case 'arp':
       payload = serializeArpMessage(frame.payload);
       break;
@@ -116,7 +115,7 @@ export function serializeMacAddress(mac: string) {
 
   return new Uint8Array(
     segments.map((byte) => {
-      const parsed = parseInt(byte, 16);
+      const parsed = Number.parseInt(byte, 16);
       if (Number.isNaN(parsed)) {
         throw new Error('invalid mac address');
       }

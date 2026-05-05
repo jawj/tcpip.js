@@ -9,10 +9,13 @@ export interface BusConnector {
   register(
     name: string,
     fn: (frame: Uint8Array) => void,
+    // biome-ignore lint/suspicious/noExplicitAny: matches v86 API
     this_value: any
   ): void;
   unregister(name: string, fn: (frame: Uint8Array) => void): void;
+  // biome-ignore lint/suspicious/noExplicitAny: matches v86 API
   send(name: string, value: any): void;
+  // biome-ignore lint/suspicious/noExplicitAny: matches v86 API
   send_async(name: string, value: any): void;
 }
 

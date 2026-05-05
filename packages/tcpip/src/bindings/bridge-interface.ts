@@ -1,17 +1,17 @@
 import {
+  type IPv4Address,
+  type IPv4Cidr,
+  type MacAddress,
   generateMacAddress,
   parseIPv4Address,
   parseMacAddress,
   serializeIPv4Cidr,
   serializeMacAddress,
-  type IPv4Address,
-  type IPv4Cidr,
-  type MacAddress,
 } from '@tcpip/wire';
 import type { Pointer } from '../types.js';
 import { Hooks } from '../util.js';
 import { Bindings } from './base.js';
-import { tapInterfaceHooks, type TapInterface } from './tap-interface.js';
+import { type TapInterface, tapInterfaceHooks } from './tap-interface.js';
 
 type BridgeInterfaceHandle = Pointer;
 
@@ -22,6 +22,7 @@ type BridgeInterfaceOuterHooks = {
   getIPv4Netmask(): IPv4Address | undefined;
 };
 
+// biome-ignore lint/complexity/noBannedTypes: intentionally empty hook type
 type BridgeInterfaceInnerHooks = {};
 
 export const bridgeInterfaceHooks = new Hooks<
@@ -30,6 +31,7 @@ export const bridgeInterfaceHooks = new Hooks<
   BridgeInterfaceInnerHooks
 >();
 
+// biome-ignore lint/complexity/noBannedTypes: intentionally empty imports type
 export type BridgeImports = {};
 
 export type BridgeExports = {
@@ -66,7 +68,9 @@ export class BridgeBindings extends Bindings<BridgeImports, BridgeExports> {
       )
     );
 
-    using portHandlesPtr = this.copyToMemory(portHandles.buffer);
+    using portHandlesPtr = this.copyToMemory(
+      new Uint8Array(portHandles.buffer)
+    );
 
     const handle = this.exports.create_bridge_interface(
       macAddressPtr,

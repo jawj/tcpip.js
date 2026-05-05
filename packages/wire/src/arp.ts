@@ -1,12 +1,12 @@
 import {
+  type MacAddress,
   parseMacAddress,
   serializeMacAddress,
-  type MacAddress,
 } from './ethernet.js';
 import {
+  type IPv4Address,
   parseIPv4Address,
   serializeIPv4Address,
-  type IPv4Address,
 } from './ipv4.js';
 
 export type ArpMessage = {

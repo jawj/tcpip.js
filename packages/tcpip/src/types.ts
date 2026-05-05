@@ -51,7 +51,7 @@ export type NetworkInterface =
   | TapInterface
   | BridgeInterface;
 
-export type DuplexStream<R = any> = {
+export type DuplexStream<R = unknown> = {
   readable: ReadableStream<R>;
   writable: WritableStream<R>;
 };

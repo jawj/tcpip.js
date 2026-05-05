@@ -1,14 +1,14 @@
 import {
-  parseIPv4Address,
-  serializeIPv4Cidr,
   type IPv4Address,
   type IPv4Cidr,
+  parseIPv4Address,
+  serializeIPv4Cidr,
 } from '@tcpip/wire';
 import type { Pointer } from '../types.js';
 import {
   ExtendedReadableStream,
-  fromReadable,
   Hooks,
+  fromReadable,
   nextMicrotask,
 } from '../util.js';
 import { Bindings } from './base.js';
@@ -178,7 +178,7 @@ export class VirtualTunInterface implements TunInterface {
 
   constructor() {
     tunInterfaceHooks.setInner(this, {
-      receivePacket: async (packet: Uint8Array) => {
+      receivePacket: async (packet: Uint8Array<ArrayBuffer>) => {
         // Do not buffer packets until the consumer signals intent
         // to listen - otherwise memory will grow indefinitely
         if (!this.#isListening) {

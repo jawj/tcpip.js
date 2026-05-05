@@ -1,8 +1,8 @@
 import {
-  parseIPv4Address,
-  serializeIPv4Cidr,
   type IPv4Address,
   type IPv4Cidr,
+  parseIPv4Address,
+  serializeIPv4Cidr,
 } from '@tcpip/wire';
 import type { Pointer } from '../types.js';
 import { Hooks } from '../util.js';
@@ -16,6 +16,7 @@ type LoopbackInterfaceOuterHooks = {
   getIPv4Netmask(): IPv4Address | undefined;
 };
 
+// biome-ignore lint/complexity/noBannedTypes: intentionally empty hook type
 type LoopbackInterfaceInnerHooks = {};
 
 export const loopbackInterfaceHooks = new Hooks<

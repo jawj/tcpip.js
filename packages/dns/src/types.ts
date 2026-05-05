@@ -1,4 +1,4 @@
-import type { ClassCode, TypeCode, OpCode, RCode } from './constants.js';
+import type { ClassCode, OpCode, RCode, TypeCode } from './constants.js';
 
 export type NameServer = {
   /**

@@ -1,10 +1,10 @@
 import { createDns } from '@tcpip/dns';
 import {
+  type IPv4Packet,
   parseEthernetFrame,
   parseIPv4Packet,
   serializeEthernetFrame,
   serializeIPv4Packet,
-  type IPv4Packet,
 } from '@tcpip/wire';
 import { describe, expect, test, vi } from 'vitest';
 import {
@@ -750,7 +750,9 @@ describe('tcp', () => {
     await inboundReader.read();
 
     // Wait for the fill write to complete and the window to reopen
-    await vi.waitFor(() => expect(isFillPending).toBe(false), { timeout: 5000 });
+    await vi.waitFor(() => expect(isFillPending).toBe(false), {
+      timeout: 5000,
+    });
   });
 
   test('tcp backpressure server to client', async () => {
@@ -791,7 +793,9 @@ describe('tcp', () => {
     await outboundReader.read();
 
     // Wait for the fill write to complete and the window to reopen
-    await vi.waitFor(() => expect(isFillPending).toBe(false), { timeout: 5000 });
+    await vi.waitFor(() => expect(isFillPending).toBe(false), {
+      timeout: 5000,
+    });
   });
 
   test('communication between stacks via tun', async () => {

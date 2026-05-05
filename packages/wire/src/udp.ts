@@ -1,4 +1,4 @@
-import { serializeIPv4PseudoHeader, type IPv4PseudoHeader } from './ipv4.js';
+import { type IPv4PseudoHeader, serializeIPv4PseudoHeader } from './ipv4.js';
 import { calculateChecksum } from './util.js';
 
 export type UdpDatagram = {

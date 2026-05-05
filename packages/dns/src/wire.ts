@@ -280,27 +280,26 @@ export function parseResourceRecord(
   const cls = parseDnsClass(view.getUint16(nameOffset + 2));
   const ttl = view.getUint32(nameOffset + 4);
   const rdLength = view.getUint16(nameOffset + 8);
-
-  offset = nameOffset + 10;
+  const rdOffset = nameOffset + 10;
 
   switch (type) {
     case 'A': {
-      const ip = parseIPv4Address(data.slice(offset, offset + rdLength));
-      const newOffset = offset + rdLength;
+      const ip = parseIPv4Address(data.slice(rdOffset, rdOffset + rdLength));
+      const newOffset = rdOffset + rdLength;
       return [{ name, class: cls, ttl, type, ip }, newOffset];
     }
     case 'AAAA': {
-      const ip = parseIPv6Address(data.slice(offset, offset + rdLength));
+      const ip = parseIPv6Address(data.slice(rdOffset, rdOffset + rdLength));
       const compressedIP = compressIPv6(ip);
-      const newOffset = offset + rdLength;
+      const newOffset = rdOffset + rdLength;
       return [{ name, class: cls, ttl, type, ip: compressedIP }, newOffset];
     }
     case 'TXT': {
-      const [value, newOffset] = parseTxtValue(data, offset, rdLength);
+      const [value, newOffset] = parseTxtValue(data, rdOffset, rdLength);
       return [{ name, class: cls, ttl, type, value }, newOffset];
     }
     case 'PTR': {
-      const [ptr, newOffset] = parseName(data, offset);
+      const [ptr, newOffset] = parseName(data, rdOffset);
       return [{ name, class: cls, ttl, type, ptr }, newOffset];
     }
     default: {

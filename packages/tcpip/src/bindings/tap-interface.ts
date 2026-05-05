@@ -1,19 +1,19 @@
 import {
+  type IPv4Address,
+  type IPv4Cidr,
+  type MacAddress,
   generateMacAddress,
   parseIPv4Address,
   parseMacAddress,
   serializeIPv4Cidr,
   serializeMacAddress,
-  type IPv4Address,
-  type IPv4Cidr,
-  type MacAddress,
 } from '@tcpip/wire';
 import { LwipError } from '../lwip/errors.js';
 import type { Pointer } from '../types.js';
 import {
   ExtendedReadableStream,
-  fromReadable,
   Hooks,
+  fromReadable,
   nextMicrotask,
 } from '../util.js';
 import { Bindings } from './base.js';
@@ -212,7 +212,7 @@ export class VirtualTapInterface implements TapInterface {
 
   constructor() {
     tapInterfaceHooks.setInner(this, {
-      receiveFrame: async (frame: Uint8Array) => {
+      receiveFrame: async (frame: Uint8Array<ArrayBuffer>) => {
         // Do not buffer frames until the consumer signals intent
         // to listen - otherwise memory will grow indefinitely
         if (!this.#isListening) {

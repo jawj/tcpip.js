@@ -38,6 +38,6 @@ describe('numberToIPv4', () => {
   test('should throw error for invalid numbers', () => {
     expect(() => numberToIPv4(-1)).toThrow();
     expect(() => numberToIPv4(4294967296)).toThrow();
-    expect(() => numberToIPv4(NaN)).toThrow();
+    expect(() => numberToIPv4(Number.NaN)).toThrow();
   });
 });
