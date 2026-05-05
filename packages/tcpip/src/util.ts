@@ -1,3 +1,5 @@
+import type { DuplexStream } from './types.js';
+
 /**
  * Utility class to facilitate internal communication
  * between bindings and JS instances.
@@ -214,4 +216,58 @@ export class ExtendedReadableStream<R> extends ReadableStream<R> {
  */
 export async function nextMicrotask() {
   return await new Promise<void>((resolve) => queueMicrotask(resolve));
+}
+
+export type ConnectInterfacesOptions = {
+  transformAtoB?: (chunk: Uint8Array) => Uint8Array;
+  transformBtoA?: (chunk: Uint8Array) => Uint8Array;
+};
+
+/**
+ * Connects two duplex streams by piping each stream's `readable`
+ * to the other's `writable`.
+ *
+ * This is useful for connecting two network interfaces together
+ * (e.g. a tap interface and a v86 network interface).
+ *
+ * Optionally supports transforming the data as it is passed
+ * between the two streams. Use this to log or modify the data.
+ */
+export function connectStreams(
+  interfaceA: DuplexStream<Uint8Array>,
+  interfaceB: DuplexStream<Uint8Array>,
+  { transformAtoB, transformBtoA }: ConnectInterfacesOptions = {}
+) {
+  const streamA = transformAtoB
+    ? interfaceA.readable.pipeThrough(
+        new TransformStream<Uint8Array>({
+          transform(chunk, controller) {
+            try {
+              const transformedChunk = transformAtoB(chunk);
+              controller.enqueue(transformedChunk);
+            } catch (error) {
+              console.warn('Error transforming A to B', error);
+            }
+          },
+        })
+      )
+    : interfaceA.readable;
+
+  const streamB = transformBtoA
+    ? interfaceB.readable.pipeThrough(
+        new TransformStream<Uint8Array>({
+          transform(chunk, controller) {
+            try {
+              const transformedChunk = transformBtoA(chunk);
+              controller.enqueue(transformedChunk);
+            } catch (error) {
+              console.warn('Error transforming B to A', error);
+            }
+          },
+        })
+      )
+    : interfaceB.readable;
+
+  streamA.pipeTo(interfaceB.writable);
+  streamB.pipeTo(interfaceA.writable);
 }

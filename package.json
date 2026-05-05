@@ -4,7 +4,7 @@
     "packages/*"
   ],
   "scripts": {
-    "build": "npm run build --workspaces",
+    "build": "npm run build -w @tcpip/wire -w @tcpip/dns -w @tcpip/dhcp -w @tcpip/v86 -w tcpip",
     "test": "npm run test --workspaces --if-present"
   }
 }

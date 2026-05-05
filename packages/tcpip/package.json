@@ -13,6 +13,8 @@
     "build:wasm": "npm run make build",
     "prepublishOnly": "npm run build",
     "test": "vitest",
+    "test:node": "vitest --project node",
+    "test:browser": "vitest --project browser",
     "clean": "rm -rf dist",
     "make": "CC='docker compose run --rm wasi-sdk /opt/wasi-sdk/bin/clang' AR='docker compose run --rm wasi-sdk /opt/wasi-sdk/bin/ar' make",
     "wasm-objdump": "docker compose run --rm wabt wasm-objdump",
