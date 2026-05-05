@@ -74,6 +74,9 @@ err_t accept_callback(void *arg, struct tcp_pcb *conn, err_t err) {
   // Set a receive callback to handle incoming data
   tcp_recv(conn, recv_tcp_callback);
 
+  // Set a sent callback to handle outgoing data acknowledgements
+  tcp_sent(conn, sent_callback);
+
   return ERR_OK;
 }
 
@@ -117,7 +120,7 @@ err_t connected_callback(void *arg, struct tcp_pcb *conn, err_t err) {
   // Set a receive callback to handle incoming data
   tcp_recv(conn, recv_tcp_callback);
 
-  // Set a sent callback to handle outgoing data
+  // Set a sent callback to handle outgoing data acknowledgements
   tcp_sent(conn, sent_callback);
 
   return ERR_OK;

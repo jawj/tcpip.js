@@ -6,7 +6,7 @@ import {
   serializeIPv4Packet,
   type IPv4Packet,
 } from '@tcpip/wire';
-import { describe, expect, test } from 'vitest';
+import { describe, expect, test, vi } from 'vitest';
 import {
   MAX_WINDOW_SIZE,
   READABLE_HIGH_WATER_MARK,
@@ -712,7 +712,7 @@ describe('tcp', () => {
     );
   });
 
-  test('tcp backpressure', async () => {
+  test('tcp backpressure client to server', async () => {
     const stack = await createStack();
 
     const listener = await stack.listenTcp({
@@ -737,30 +737,61 @@ describe('tcp', () => {
       SEND_BUFFER_SIZE + MAX_WINDOW_SIZE + READABLE_HIGH_WATER_MARK
     );
 
-    // Fill all the buffers
-    await outboundWriter.write(data);
-
-    // Now create a single byte of overflow data
-    const overflowData = new Uint8Array(1);
-
-    // Send the overflow data to see if backpressure is being applied
-    let isWritePending = true;
-    outboundWriter.write(overflowData).then(() => {
-      isWritePending = false;
+    // Fill all the buffers - don't await, this will stall once window/send buffer fill
+    let isFillPending = true;
+    outboundWriter.write(data).then(() => {
+      isFillPending = false;
     });
 
-    // Wait to ensure enough time has passed for the TCP stack
-    // to process the data
-    await new Promise((resolve) => setTimeout(resolve, 500));
-    expect(isWritePending).toBe(true);
+    // Wait for the fill write to stall (stuck waiting for window space)
+    await vi.waitFor(() => expect(isFillPending).toBe(true), { timeout: 500 });
 
     // Drain the readable stream buffer, signaling a window update
     await inboundReader.read();
 
-    // Wait to ensure enough time has passed for the TCP stack
-    // to process the window update and send the overflow data
-    await new Promise((resolve) => setTimeout(resolve, 500));
-    expect(isWritePending).toBe(false);
+    // Wait for the fill write to complete and the window to reopen
+    await vi.waitFor(() => expect(isFillPending).toBe(false), { timeout: 5000 });
+  });
+
+  test('tcp backpressure server to client', async () => {
+    const stack = await createStack();
+
+    const listener = await stack.listenTcp({
+      host: '127.0.0.1',
+      port: 8080,
+    });
+
+    const [outbound, inbound] = await Promise.all([
+      stack.connectTcp({
+        host: '127.0.0.1',
+        port: 8080,
+      }),
+      nextValue(listener),
+    ]);
+
+    const outboundReader = outbound.readable.getReader();
+    const inboundWriter = inbound.writable.getWriter();
+
+    // To simulate backpressure, we need to fill the TCP stack's send buffer,
+    // the peer's TCP receive window, and the peer's readable stream buffer
+    const data = new Uint8Array(
+      SEND_BUFFER_SIZE + MAX_WINDOW_SIZE + READABLE_HIGH_WATER_MARK
+    );
+
+    // Fill all the buffers - don't await, this will stall once window/send buffer fill
+    let isFillPending = true;
+    inboundWriter.write(data).then(() => {
+      isFillPending = false;
+    });
+
+    // Wait for the fill write to stall (stuck waiting for window space)
+    await vi.waitFor(() => expect(isFillPending).toBe(true), { timeout: 500 });
+
+    // Drain the readable stream buffer, signaling a window update
+    await outboundReader.read();
+
+    // Wait for the fill write to complete and the window to reopen
+    await vi.waitFor(() => expect(isFillPending).toBe(false), { timeout: 5000 });
   });
 
   test('communication between stacks via tun', async () => {
