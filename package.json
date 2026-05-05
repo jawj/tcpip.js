@@ -5,7 +5,8 @@
     "build": "pnpm -r build",
     "test": "pnpm -r --if-present test",
     "format": "biome format --write .",
-    "check": "biome check --write ."
+    "check": "biome check --write .",
+    "typecheck": "pnpm -r exec tsc --noEmit"
   },
   "devDependencies": {
     "@biomejs/biome": "catalog:"

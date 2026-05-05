@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import { ipToPtrName, ptrNameToIP } from './util';
+import { ipToPtrName, ptrNameToIP } from './util.js';
 
 describe('ipToPtrName', () => {
   test('should convert an IPv4 address to a PTR name', () => {

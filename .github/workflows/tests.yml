@@ -19,6 +19,8 @@ jobs:
         run: pnpm install --frozen-lockfile --ignore-scripts
       - name: Check
         run: pnpm exec biome ci .
+      - name: Typecheck
+        run: pnpm typecheck
       - name: Build libs
         run: pnpm build
       - name: Get playwright version
