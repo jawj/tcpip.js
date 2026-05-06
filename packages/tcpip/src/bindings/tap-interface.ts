@@ -1,6 +1,5 @@
 import {
   type IPv4Address,
-  type IPv4Cidr,
   type MacAddress,
   generateMacAddress,
   parseIPv4Address,
@@ -9,7 +8,7 @@ import {
   serializeMacAddress,
 } from '@tcpip/wire';
 import { LwipError } from '../lwip/errors.js';
-import type { Pointer } from '../types.js';
+import type { TapInterface, TapInterfaceOptions } from '../types.js';
 import {
   ExtendedReadableStream,
   Hooks,
@@ -17,6 +16,7 @@ import {
   nextMicrotask,
 } from '../util.js';
 import { Bindings } from './base.js';
+import type { Pointer } from './types.js';
 
 type TapInterfaceHandle = Pointer;
 
@@ -176,22 +176,6 @@ export class TapBindings extends Bindings<TapImports, TapExports> {
     }
   }
 }
-
-export type TapInterfaceOptions = {
-  mac?: MacAddress;
-  ip?: IPv4Cidr;
-};
-
-export type TapInterface = {
-  readonly type: 'tap';
-  readonly mac: MacAddress;
-  readonly ip?: IPv4Address;
-  readonly netmask?: IPv4Address;
-  readable: ReadableStream<Uint8Array>;
-  writable: WritableStream<Uint8Array>;
-  listen(): AsyncIterableIterator<Uint8Array>;
-  [Symbol.asyncIterator](): AsyncIterableIterator<Uint8Array>;
-};
 
 export class VirtualTapInterface implements TapInterface {
   #readableController?: ReadableStreamController<Uint8Array>;

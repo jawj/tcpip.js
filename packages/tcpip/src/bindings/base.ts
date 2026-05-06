@@ -1,11 +1,10 @@
-import type { Pointer, SysExports, WasiExports } from '../types.js';
 import { UniquePointer } from '../util.js';
-
-export type CommonExports = {
-  get_interface_mac_address(handle: Pointer): Pointer;
-  get_interface_ip4_address(handle: Pointer): Pointer;
-  get_interface_ip4_netmask(handle: Pointer): Pointer;
-};
+import type {
+  CommonExports,
+  Pointer,
+  SysExports,
+  WasiExports,
+} from './types.js';
 
 export abstract class Bindings<Imports, Exports> {
   #exports?: Exports & CommonExports & WasiExports & SysExports;

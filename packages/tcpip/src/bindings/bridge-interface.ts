@@ -1,6 +1,5 @@
 import {
   type IPv4Address,
-  type IPv4Cidr,
   type MacAddress,
   generateMacAddress,
   parseIPv4Address,
@@ -8,10 +7,11 @@ import {
   serializeIPv4Cidr,
   serializeMacAddress,
 } from '@tcpip/wire';
-import type { Pointer } from '../types.js';
+import type { BridgeInterface, BridgeInterfaceOptions } from '../types.js';
 import { Hooks } from '../util.js';
 import { Bindings } from './base.js';
-import { type TapInterface, tapInterfaceHooks } from './tap-interface.js';
+import { tapInterfaceHooks } from './tap-interface.js';
+import type { Pointer } from './types.js';
 
 type BridgeInterfaceHandle = Pointer;
 
@@ -127,19 +127,6 @@ export class BridgeBindings extends Bindings<BridgeImports, BridgeExports> {
     }
   }
 }
-
-export type BridgeInterfaceOptions = {
-  ports: TapInterface[];
-  mac?: MacAddress;
-  ip?: IPv4Cidr;
-};
-
-export type BridgeInterface = {
-  readonly type: 'bridge';
-  readonly mac: MacAddress;
-  readonly ip?: IPv4Address;
-  readonly netmask?: IPv4Address;
-};
 
 export class VirtualBridgeInterface implements BridgeInterface {
   readonly type = 'bridge';

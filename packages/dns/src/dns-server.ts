@@ -1,4 +1,4 @@
-import type { NetworkStack, UdpDatagram, UdpSocket } from 'tcpip';
+import type { NetworkStack, UdpDatagram, UdpSocket } from 'tcpip/types';
 import type { DnsMessage, DnsRecord, DnsResponse, DnsType } from './types.js';
 import { parseDnsMessage, serializeDnsMessage } from './wire.js';
 

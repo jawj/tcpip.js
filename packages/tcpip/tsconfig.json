@@ -3,8 +3,9 @@
   "include": ["src/**/*.ts"],
   "compilerOptions": {
     "paths": {
-      "@tcpip/dns": ["../dns/src"],
-      "@tcpip/wire": ["../wire/src"]
+      "@tcpip/dns": ["../dns/src/index.js"],
+      "@tcpip/wire": ["../wire/src/index.js"],
+      "tcpip/types": ["./src/types.js"]
     }
   }
 }

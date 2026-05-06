@@ -1,12 +1,12 @@
 import {
   type IPv4Address,
-  type IPv4Cidr,
   parseIPv4Address,
   serializeIPv4Cidr,
 } from '@tcpip/wire';
-import type { Pointer } from '../types.js';
+import type { LoopbackInterface, LoopbackInterfaceOptions } from '../types.js';
 import { Hooks } from '../util.js';
 import { Bindings } from './base.js';
+import type { Pointer } from './types.js';
 
 type LoopbackInterfaceHandle = Pointer;
 
@@ -107,16 +107,6 @@ export class LoopbackBindings extends Bindings<
     }
   }
 }
-
-export type LoopbackInterfaceOptions = {
-  ip?: IPv4Cidr;
-};
-
-export type LoopbackInterface = {
-  readonly type: 'loopback';
-  readonly ip?: IPv4Address;
-  readonly netmask?: IPv4Address;
-};
 
 export class VirtualLoopbackInterface implements LoopbackInterface {
   readonly type = 'loopback';

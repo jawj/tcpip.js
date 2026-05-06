@@ -6,7 +6,7 @@ import { createRequire } from 'node:module';
 import { dirname, join } from 'node:path';
 import { Writable } from 'node:stream';
 import { V86 } from 'v86';
-import { createV86NetworkStream } from '../dist/index';
+import { createV86NetworkStream } from '../src/index.js';
 
 const require = createRequire(import.meta.url);
 
@@ -117,7 +117,22 @@ export async function createVm({
   return { emulator, net, executeCommand };
 }
 
-export async function nextValue<T>(iterable: Iterable<T> | AsyncIterable<T>) {
+export async function nextValue<T>(
+  iterable: Iterable<T> | AsyncIterable<T> | ReadableStream<T>
+) {
+  if (iterable instanceof ReadableStream) {
+    const reader = iterable.getReader();
+    try {
+      const { value, done } = await reader.read();
+      if (done) {
+        throw new Error('reader done');
+      }
+      return value;
+    } finally {
+      reader.releaseLock();
+    }
+  }
+
   const iterator =
     Symbol.asyncIterator in iterable
       ? iterable[Symbol.asyncIterator]()

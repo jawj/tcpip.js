@@ -1,19 +1,10 @@
 import type { DnsClient } from '@tcpip/dns';
-import {
-  type IPv4Address,
-  parseIPv4Address,
-  serializeIPv4Address,
-} from '@tcpip/wire';
+import { parseIPv4Address, serializeIPv4Address } from '@tcpip/wire';
 import { LwipError } from '../lwip/errors.js';
-import type { Pointer } from '../types.js';
+import type { UdpDatagram, UdpSocket, UdpSocketOptions } from '../types.js';
 import { EventMap, Hooks, fromReadable, nextMicrotask } from '../util.js';
 import { Bindings } from './base.js';
-
-export type UdpDatagram = {
-  host: string;
-  port: number;
-  data: Uint8Array;
-};
+import type { Pointer } from './types.js';
 
 type UdpSocketHandle = Pointer;
 
@@ -143,29 +134,6 @@ export class UdpBindings extends Bindings<UdpImports, UdpExports> {
     return udpSocket;
   }
 }
-
-export type UdpSocketOptions = {
-  /**
-   * The local host to bind to.
-   *
-   * If not provided, the socket will bind to all available interfaces.
-   */
-  host?: string;
-
-  /**
-   * The local port to bind to.
-   *
-   * If not provided, the socket will bind to a random port.
-   */
-  port?: number;
-};
-
-export type UdpSocket = {
-  readable: ReadableStream<UdpDatagram>;
-  writable: WritableStream<UdpDatagram>;
-  close(): Promise<void>;
-  [Symbol.asyncIterator](): AsyncIterator<UdpDatagram>;
-};
 
 export class VirtualUdpSocket implements UdpSocket, AsyncIterable<UdpDatagram> {
   #readableController?: ReadableStreamDefaultController<UdpDatagram>;

@@ -14,16 +14,13 @@
   "files": ["dist/**/*"],
   "exports": {
     ".": {
-      "import": "./dist/index.js",
       "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
       "default": "./dist/index.cjs"
     }
   },
   "dependencies": {
     "@tcpip/wire": "workspace:*"
-  },
-  "peerDependencies": {
-    "tcpip": "workspace:*"
   },
   "devDependencies": {
     "@total-typescript/tsconfig": "catalog:",

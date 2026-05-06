@@ -1,4 +1,4 @@
-import type { NetworkStack } from 'tcpip';
+import type { NetworkStack } from 'tcpip/types';
 import { DnsClient, type DnsClientOptions } from './dns-client.js';
 import { DnsServer, type DnsServerOptions } from './dns-server.js';
 

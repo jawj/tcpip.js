@@ -1,10 +1,9 @@
 import {
   type IPv4Address,
-  type IPv4Cidr,
   parseIPv4Address,
   serializeIPv4Cidr,
 } from '@tcpip/wire';
-import type { Pointer } from '../types.js';
+import type { TunInterface, TunInterfaceOptions } from '../types.js';
 import {
   ExtendedReadableStream,
   Hooks,
@@ -12,6 +11,7 @@ import {
   nextMicrotask,
 } from '../util.js';
 import { Bindings } from './base.js';
+import type { Pointer } from './types.js';
 
 type TunInterfaceHandle = Pointer;
 
@@ -147,20 +147,6 @@ export class TunBindings extends Bindings<TunImports, TunExports> {
     }
   }
 }
-
-export type TunInterfaceOptions = {
-  ip?: IPv4Cidr;
-};
-
-export type TunInterface = {
-  readonly type: 'tun';
-  readonly ip?: IPv4Address;
-  readonly netmask?: IPv4Address;
-  readable: ReadableStream<Uint8Array>;
-  writable: WritableStream<Uint8Array>;
-  listen(): AsyncIterableIterator<Uint8Array>;
-  [Symbol.asyncIterator](): AsyncIterableIterator<Uint8Array>;
-};
 
 export class VirtualTunInterface implements TunInterface {
   #readableController?: ReadableStreamController<Uint8Array>;

@@ -1,9 +1,15 @@
 import type { DnsClient } from '@tcpip/dns';
-import { type IPv4Address, serializeIPv4Address } from '@tcpip/wire';
+import { serializeIPv4Address } from '@tcpip/wire';
 import { LwipError } from '../lwip/errors.js';
-import type { Pointer } from '../types.js';
+import type {
+  TcpConnection,
+  TcpConnectionOptions,
+  TcpListener,
+  TcpListenerOptions,
+} from '../types.js';
 import { EventMap, Hooks, fromReadable, nextMicrotask } from '../util.js';
 import { Bindings } from './base.js';
+import type { Pointer } from './types.js';
 
 type TcpListenerHandle = Pointer;
 type TcpConnectionHandle = Pointer;
@@ -255,15 +261,6 @@ export class TcpBindings extends Bindings<TcpImports, TcpExports> {
   }
 }
 
-export type TcpListenerOptions = {
-  host?: string;
-  port: number;
-};
-
-export type TcpListener = {
-  [Symbol.asyncIterator](): AsyncIterableIterator<TcpConnection>;
-};
-
 export class VirtualTcpListener
   implements TcpListener, AsyncIterable<TcpConnection>
 {
@@ -290,18 +287,6 @@ export class VirtualTcpListener
     }
   }
 }
-
-export type TcpConnectionOptions = {
-  host: string;
-  port: number;
-};
-
-export type TcpConnection = {
-  readable: ReadableStream<Uint8Array>;
-  writable: WritableStream<Uint8Array>;
-  close(): Promise<void>;
-  [Symbol.asyncIterator](): AsyncIterator<Uint8Array>;
-};
 
 export class VirtualTcpConnection
   implements TcpConnection, AsyncIterable<Uint8Array>

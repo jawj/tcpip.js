@@ -23,9 +23,14 @@
   "files": ["dist/**/*", "tcpip.wasm"],
   "exports": {
     ".": {
-      "import": "./dist/index.js",
       "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
       "default": "./dist/index.cjs"
+    },
+    "./types": {
+      "types": "./dist/types.d.ts",
+      "import": "./dist/types.js",
+      "default": "./dist/types.cjs"
     }
   },
   "dependencies": {
