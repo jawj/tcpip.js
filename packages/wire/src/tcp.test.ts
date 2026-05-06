@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import { serializeIPv4PseudoHeader } from './ipv4.js';
 import {
+  TCP_HEADER_MIN_LENGTH,
+  type TcpSegment,
   parseTcpSegment,
   serializeTcpSegment,
-  type TcpSegment,
-  TCP_HEADER_MIN_LENGTH,
 } from './tcp.js';
 
 describe('parseTcpSegment', () => {

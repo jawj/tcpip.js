@@ -1,5 +1,6 @@
 import { expect, test } from 'vitest';
 import {
+  type IPv4Packet,
   generateNetmask,
   getPrefixLength,
   parseIPv4Address,
@@ -7,7 +8,6 @@ import {
   serializeIPv4Address,
   serializeIPv4Cidr,
   serializeIPv4Packet,
-  type IPv4Packet,
 } from './ipv4.js';
 
 test('parses an IPv4 address string into a Uint8Array', () => {

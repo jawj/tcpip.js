@@ -14,7 +14,7 @@ export function ipv4ToNumber(ip: string): number {
  * Converts a 32-bit number to an IPv4 address.
  */
 export function numberToIPv4(num: number): string {
-  if (isNaN(num) || num < 0 || num > 0xffffffff) {
+  if (Number.isNaN(num) || num < 0 || num > 0xffffffff) {
     throw new Error('invalid ipv4 number');
   }
 

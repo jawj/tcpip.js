@@ -1,7 +1,7 @@
+import { type TcpSegment, parseEthernetFrame } from '@tcpip/wire';
 import { connectStreams, createStack } from 'tcpip';
 import { describe, expect, it } from 'vitest';
-import { createVm, nextValue } from '../test/util.ts';
-import { parseEthernetFrame, TcpSegment } from '@tcpip/wire';
+import { createVm, nextValue } from '../test/util.js';
 
 describe('network adapter', () => {
   it('should make tcp connection from VM to host', async () => {
@@ -101,7 +101,7 @@ describe('network adapter', () => {
 
     const message = await telnetPromise;
     expect(message).toBe(
-      textDecoder.decode(data) + 'Connection closed by foreign host'
+      `${textDecoder.decode(data)}Connection closed by foreign host`
     );
 
     await emulator.destroy();

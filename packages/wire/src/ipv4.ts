@@ -1,18 +1,18 @@
 import {
+  type IcmpMessage,
   parseIcmpMessage,
   serializeIcmpMessage,
-  type IcmpMessage,
 } from './icmp.js';
 import {
+  type TcpSegment,
   parseTcpSegment,
   serializeTcpSegment,
-  type TcpSegment,
 } from './tcp.js';
 import {
-  parseUdpDatagram,
-  serializeUdpDatagram,
   UDP_HEADER_LENGTH,
   type UdpDatagram,
+  parseUdpDatagram,
+  serializeUdpDatagram,
 } from './udp.js';
 import { calculateChecksum, parseUint } from './util.js';
 
@@ -296,7 +296,7 @@ export function serializeIPv4Cidr(cidr: string) {
     throw new Error('invalid cidr');
   }
 
-  const maskSize = parseInt(maskSizeString, 10);
+  const maskSize = Number.parseInt(maskSizeString, 10);
   const netmask = generateNetmask(maskSize);
 
   return {

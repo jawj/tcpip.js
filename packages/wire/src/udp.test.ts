@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import { serializeIPv4PseudoHeader } from './ipv4.js';
 import {
+  type UdpDatagram,
   parseUdpDatagram,
   serializeUdpDatagram,
-  type UdpDatagram,
 } from './udp.js';
 
 describe('parseUdpDatagram', () => {

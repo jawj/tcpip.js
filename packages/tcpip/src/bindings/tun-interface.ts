@@ -1,17 +1,17 @@
 import {
+  type IPv4Address,
   parseIPv4Address,
   serializeIPv4Cidr,
-  type IPv4Address,
-  type IPv4Cidr,
 } from '@tcpip/wire';
-import type { Pointer } from '../types.js';
+import type { TunInterface, TunInterfaceOptions } from '../types.js';
 import {
   ExtendedReadableStream,
-  fromReadable,
   Hooks,
+  fromReadable,
   nextMicrotask,
 } from '../util.js';
 import { Bindings } from './base.js';
+import type { Pointer } from './types.js';
 
 type TunInterfaceHandle = Pointer;
 
@@ -148,20 +148,6 @@ export class TunBindings extends Bindings<TunImports, TunExports> {
   }
 }
 
-export type TunInterfaceOptions = {
-  ip?: IPv4Cidr;
-};
-
-export type TunInterface = {
-  readonly type: 'tun';
-  readonly ip?: IPv4Address;
-  readonly netmask?: IPv4Address;
-  readable: ReadableStream<Uint8Array>;
-  writable: WritableStream<Uint8Array>;
-  listen(): AsyncIterableIterator<Uint8Array>;
-  [Symbol.asyncIterator](): AsyncIterableIterator<Uint8Array>;
-};
-
 export class VirtualTunInterface implements TunInterface {
   #readableController?: ReadableStreamController<Uint8Array>;
   #isListening = false;
@@ -178,7 +164,7 @@ export class VirtualTunInterface implements TunInterface {
 
   constructor() {
     tunInterfaceHooks.setInner(this, {
-      receivePacket: async (packet: Uint8Array) => {
+      receivePacket: async (packet: Uint8Array<ArrayBuffer>) => {
         // Do not buffer packets until the consumer signals intent
         // to listen - otherwise memory will grow indefinitely
         if (!this.#isListening) {

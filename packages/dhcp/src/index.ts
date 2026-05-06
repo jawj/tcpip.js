@@ -1,4 +1,4 @@
-import type { NetworkStack } from 'tcpip';
+import type { NetworkStack } from 'tcpip/types';
 import { DhcpServer, type DhcpServerOptions } from './dhcp-server.js';
 
 export * from './dhcp-server.js';

@@ -1,4 +1,4 @@
-import type { NetworkStack } from 'tcpip';
+import type { NetworkStack } from 'tcpip/types';
 import type { DnsMessage, DnsQuery, DnsRecord, NameServer } from './types.js';
 import { ipToPtrName } from './util.js';
 import { parseDnsMessage, serializeDnsMessage } from './wire.js';

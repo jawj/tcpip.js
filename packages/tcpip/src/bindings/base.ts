@@ -1,11 +1,10 @@
-import type { Pointer, SysExports, WasiExports } from '../types.js';
 import { UniquePointer } from '../util.js';
-
-export type CommonExports = {
-  get_interface_mac_address(handle: Pointer): Pointer;
-  get_interface_ip4_address(handle: Pointer): Pointer;
-  get_interface_ip4_netmask(handle: Pointer): Pointer;
-};
+import type {
+  CommonExports,
+  Pointer,
+  SysExports,
+  WasiExports,
+} from './types.js';
 
 export abstract class Bindings<Imports, Exports> {
   #exports?: Exports & CommonExports & WasiExports & SysExports;
@@ -42,9 +41,8 @@ export abstract class Bindings<Imports, Exports> {
    *
    * @returns A pointer to the start of the copied data.
    */
-  copyToMemory(data: ArrayBuffer) {
-    const bytes = new Uint8Array(data);
-    const length = bytes.length;
+  copyToMemory(data: Uint8Array) {
+    const length = data.length;
     const pointer = this.smartMalloc(length);
 
     const memoryView = new Uint8Array(
@@ -53,7 +51,7 @@ export abstract class Bindings<Imports, Exports> {
       length
     );
 
-    memoryView.set(bytes);
+    memoryView.set(data);
 
     return pointer;
   }

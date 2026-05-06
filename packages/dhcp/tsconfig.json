@@ -1,10 +1,13 @@
 {
-  "extends": "@total-typescript/tsconfig/bundler/dom/library",
+  "extends": "@total-typescript/tsconfig/tsc/dom/library",
   "include": ["src/**/*.ts"],
   "compilerOptions": {
+    "lib": ["es2022", "dom", "dom.iterable", "esnext.disposable"],
     "paths": {
-      "tcpip": ["../tcpip/src"],
-      "@tcpip/wire": ["../wire/src"]
+      "tcpip": ["../tcpip/src/index.js"],
+      "tcpip/types": ["../tcpip/src/types.js"],
+      "@tcpip/dns": ["../dns/src/index.js"],
+      "@tcpip/wire": ["../wire/src/index.js"]
     }
   }
 }

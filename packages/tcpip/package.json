@@ -8,10 +8,10 @@
   "types": "dist/index.d.ts",
   "sideEffects": false,
   "scripts": {
-    "build": "npm run build:js && npm run build:wasm",
+    "build": "pnpm run build:js && pnpm run build:wasm",
     "build:js": "tsup --clean",
-    "build:wasm": "npm run make build",
-    "prepublishOnly": "npm run build",
+    "build:wasm": "pnpm run make build",
+    "prepublishOnly": "pnpm run build",
     "test": "vitest",
     "test:node": "vitest --project node",
     "test:browser": "vitest --project browser",
@@ -20,31 +20,32 @@
     "wasm-objdump": "docker compose run --rm wabt wasm-objdump",
     "wasm-opt": "docker compose run --rm binaryen wasm-opt -Oz --enable-bulk-memory wasm/tcpip.wasm -o wasm/tcpip.min.wasm"
   },
-  "files": [
-    "dist/**/*",
-    "tcpip.wasm"
-  ],
+  "files": ["dist/**/*", "tcpip.wasm"],
   "exports": {
     ".": {
-      "import": "./dist/index.js",
       "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
       "default": "./dist/index.cjs"
+    },
+    "./types": {
+      "types": "./dist/types.d.ts",
+      "import": "./dist/types.js",
+      "default": "./dist/types.cjs"
     }
   },
   "dependencies": {
     "@bjorn3/browser_wasi_shim": "^0.3.0",
-    "@tcpip/dns": "0.2",
-    "@tcpip/wire": "0.1"
+    "@tcpip/dns": "workspace:*",
+    "@tcpip/wire": "workspace:*"
   },
   "devDependencies": {
-    "@playwright/test": "^1.52.0",
-    "@total-typescript/tsconfig": "^1.0.4",
-    "@types/node": "^22.8.6",
-    "@vitest/browser": "^3.1.2",
-    "prettier": "^3.3.3",
-    "tsup": "^8.3.5",
-    "tsx": "^4.19.2",
-    "typescript": "^5.6.3",
-    "vitest": "^3.1.2"
+    "@playwright/test": "catalog:",
+    "@total-typescript/tsconfig": "catalog:",
+    "@types/node": "catalog:",
+    "@vitest/browser": "catalog:",
+    "tsup": "catalog:",
+    "tsx": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
   }
 }

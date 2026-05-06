@@ -1,39 +1,27 @@
 import { ConsoleStdout, File, OpenFile, WASI } from '@bjorn3/browser_wasi_shim';
 import { DnsClient, type NameServer } from '@tcpip/dns';
-import {
-  BridgeBindings,
-  type BridgeInterface,
-  type BridgeInterfaceOptions,
-} from './bindings/bridge-interface.js';
-import {
-  LoopbackBindings,
-  type LoopbackInterface,
-  type LoopbackInterfaceOptions,
-} from './bindings/loopback-interface.js';
-import {
-  TapBindings,
-  type TapInterface,
-  type TapInterfaceOptions,
-} from './bindings/tap-interface.js';
-import {
-  TcpBindings,
-  type TcpConnection,
-  type TcpConnectionOptions,
-  type TcpListener,
-  type TcpListenerOptions,
-} from './bindings/tcp.js';
-import {
-  TunBindings,
-  type TunInterface,
-  type TunInterfaceOptions,
-} from './bindings/tun-interface.js';
-import {
-  UdpBindings,
-  type UdpSocket,
-  type UdpSocketOptions,
-} from './bindings/udp.js';
+import { BridgeBindings } from './bindings/bridge-interface.js';
+import { LoopbackBindings } from './bindings/loopback-interface.js';
+import { TapBindings } from './bindings/tap-interface.js';
+import { TcpBindings } from './bindings/tcp.js';
+import { TunBindings } from './bindings/tun-interface.js';
+import type { WasmInstance } from './bindings/types.js';
+import { UdpBindings } from './bindings/udp.js';
 import { fetchFile } from './fetch-file.js';
-import type { NetworkInterface, WasmInstance } from './types.js';
+import type {
+  BridgeInterfaceOptions,
+  LoopbackInterface,
+  LoopbackInterfaceOptions,
+  NetworkInterface,
+  NetworkStack,
+  TapInterface,
+  TapInterfaceOptions,
+  TcpConnectionOptions,
+  TcpListenerOptions,
+  TunInterface,
+  TunInterfaceOptions,
+  UdpSocketOptions,
+} from './types.js';
 
 export async function createStack(
   options?: NetworkStackOptions
@@ -57,38 +45,6 @@ export type NetworkStackOptions = {
    * @default { ip: '127.0.0.1', port: 53 }
    */
   nameServer?: NameServer;
-};
-
-export type NetworkStack = {
-  readonly ready: Promise<void>;
-  readonly interfaces: Iterable<NetworkInterface>;
-
-  createLoopbackInterface(
-    options: LoopbackInterfaceOptions
-  ): Promise<LoopbackInterface>;
-  createTunInterface(options: TunInterfaceOptions): Promise<TunInterface>;
-  createTapInterface(options?: TapInterfaceOptions): Promise<TapInterface>;
-  createBridgeInterface(
-    options: BridgeInterfaceOptions
-  ): Promise<BridgeInterface>;
-  removeInterface(
-    netInterface: LoopbackInterface | TunInterface | TapInterface
-  ): Promise<void>;
-  /**
-   * Listens for incoming TCP connections on the specified host/port.
-   */
-  listenTcp(options: TcpListenerOptions): Promise<TcpListener>;
-  /**
-   * Establishes an outbound TCP connection to a remote host/port.
-   */
-  connectTcp(options: TcpConnectionOptions): Promise<TcpConnection>;
-  /**
-   * Opens a UDP socket for sending and receiving datagrams.
-   *
-   * If no local host is provided, the socket will bind to all available interfaces.
-   * If no local port is provided, the socket will bind to a random port.
-   */
-  openUdp(options?: UdpSocketOptions): Promise<UdpSocket>;
 };
 
 export class VirtualNetworkStack implements NetworkStack {

@@ -6,5 +6,7 @@
  * as a scoped polyfill without polluting the global scope.
  */
 
+// biome-ignore lint/suspicious/noExplicitAny: polyfill requires casting Symbol
 (Symbol as any).dispose ??= Symbol.for('Symbol.dispose');
+// biome-ignore lint/suspicious/noExplicitAny: polyfill requires casting Symbol
 (Symbol as any).asyncDispose ??= Symbol.for('Symbol.asyncDispose');

@@ -1,11 +1,11 @@
-import type { NetworkStack, UdpDatagram, UdpSocket } from 'tcpip';
+import type { NetworkStack, UdpDatagram, UdpSocket } from 'tcpip/types';
 import type { DnsMessage, DnsRecord, DnsResponse, DnsType } from './types.js';
 import { parseDnsMessage, serializeDnsMessage } from './wire.js';
 
 export type RequestFn = (query: {
   name: string;
   type: DnsType;
-}) => Promise<DnsResponse | DnsResponse[] | void>;
+}) => Promise<DnsResponse | DnsResponse[] | undefined>;
 
 export type DnsServerOptions = {
   /**
@@ -106,7 +106,7 @@ async function handleRequestMessage(
  */
 function createResponseMessage(
   query: DnsMessage,
-  response: DnsResponse | DnsResponse[] | void
+  response: DnsResponse | DnsResponse[] | undefined
 ): DnsMessage {
   // Handle undefined response (NXDOMAIN)
   if (!response) {

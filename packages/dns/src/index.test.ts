@@ -29,7 +29,7 @@ describe('createDns', () => {
     const { lookup, serve } = await createDns(stack);
 
     await serve({
-      request: async () => {},
+      request: async () => undefined,
     });
 
     await expect(lookup('example.com')).rejects.toThrow(

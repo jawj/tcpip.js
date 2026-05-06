@@ -163,6 +163,7 @@ export class ExtendedReadableStream<R> extends ReadableStream<R> {
   }
 
   override getReader() {
+    // biome-ignore lint/suspicious/noExplicitAny: ReadableStream types don't expose internal reader methods
     const reader = super.getReader() as any;
     if (this.locked) {
       this.#notifyLock?.();

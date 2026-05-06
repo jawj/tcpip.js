@@ -1,0 +1,17 @@
+packages:
+  - 'packages/*'
+
+ignoredBuiltDependencies:
+  - '@biomejs/biome'
+  - esbuild
+
+catalog:
+  '@biomejs/biome': ^1.9.0
+  '@playwright/test': ^1.52.0
+  '@total-typescript/tsconfig': ^1.0.4
+  '@types/node': ^22.15.19
+  '@vitest/browser': ^3.1.2
+  tsup: ^8.3.5
+  tsx: ^4.19.2
+  typescript: ^5.8.3
+  vitest: ^3.1.4

@@ -1,4 +1,7 @@
 {
-  "extends": "@total-typescript/tsconfig/bundler/dom/library",
-  "include": ["src/**/*.ts"]
+  "extends": "@total-typescript/tsconfig/tsc/dom/library",
+  "include": ["src/**/*.ts"],
+  "compilerOptions": {
+    "lib": ["es2022", "dom", "dom.iterable", "esnext.disposable"]
+  }
 }

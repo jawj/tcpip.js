@@ -459,7 +459,7 @@ describe('parseResourceRecord', () => {
     ]);
 
     expect(() => parseResourceRecord(data, 0)).toThrow(
-      `unsupported record type: ANY`
+      'unsupported record type: ANY'
     );
   });
 });
@@ -622,6 +622,7 @@ describe('serializeResourceRecord', () => {
   });
 
   it('should throw on unsupported record type', () => {
+    // biome-ignore lint/suspicious/noExplicitAny: testing unsupported type at runtime
     const record: any = {
       name: 'www',
       type: 'MX',

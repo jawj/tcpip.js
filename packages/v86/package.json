@@ -11,24 +11,24 @@
     "build": "tsup --clean",
     "clean": "rm -rf dist",
     "test": "vitest",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "pnpm run build"
   },
-  "files": [
-    "dist/**/*"
-  ],
+  "files": ["dist/**/*"],
   "exports": {
     ".": {
-      "import": "./dist/index.js",
       "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
       "default": "./dist/index.cjs"
     }
   },
   "devDependencies": {
-    "@tcpip/wire": "^0.1.2",
-    "@total-typescript/tsconfig": "^1.0.4",
-    "@types/node": "^22.15.19",
-    "typescript": "^5.8.3",
+    "@tcpip/wire": "workspace:*",
+    "@total-typescript/tsconfig": "catalog:",
+    "@types/node": "catalog:",
+    "tsup": "catalog:",
+    "tcpip": "workspace:*",
+    "typescript": "catalog:",
     "v86": "^0.5.44",
-    "vitest": "^3.1.4"
+    "vitest": "catalog:"
   }
 }
