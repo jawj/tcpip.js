@@ -1,4 +1,4 @@
-import type { NetworkStack, UdpDatagram, UdpSocket } from 'tcpip';
+import type { NetworkStack, UdpDatagram, UdpSocket } from 'tcpip/types';
 import {
   DHCP_CLIENT_PORT,
   DHCP_SERVER_PORT,
