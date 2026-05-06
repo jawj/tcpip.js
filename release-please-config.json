@@ -23,11 +23,5 @@
     "packages/v86": {
       "component": "@tcpip/v86"
     }
-  },
-  "plugins": [
-    {
-      "type": "node-workspace",
-      "updatePeerDependencies": true
-    }
-  ]
+  }
 }
