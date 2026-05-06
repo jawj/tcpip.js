@@ -26,6 +26,7 @@
     "@total-typescript/tsconfig": "catalog:",
     "@types/node": "catalog:",
     "tsup": "catalog:",
+    "tcpip": "workspace:*",
     "typescript": "catalog:",
     "v86": "^0.5.44",
     "vitest": "catalog:"
