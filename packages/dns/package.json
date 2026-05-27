@@ -1,6 +1,6 @@
 {
   "name": "@tcpip/dns",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "DNS server built on tcpip.js",
   "repository": {
     "type": "git",
